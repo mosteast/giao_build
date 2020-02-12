@@ -1,0 +1,83 @@
+#!/usr/bin/env ts-node
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const env_helper_1 = require("@mosteast/env_helper");
+const print_helper_1 = require("@mosteast/print_helper");
+const yargs = require("yargs");
+const lifecycle_1 = require("../dev/lib/app/lifecycle");
+const set_app_mode_1 = require("../dev/lib/docker/set_app_mode");
+yargs
+    .command({
+    command: '$0',
+    describe: 'App cli - use `--help` to see sub-command help info',
+    builder(argv) {
+        return argv
+            .options({
+            services: {
+                alias: 's',
+                type: 'array',
+                describe: 'Container services to start: `app`',
+            },
+            dc_config: {
+                alias: 'c',
+                type: 'string',
+                describe: 'Docker compose config file: `docker-compose.yml`',
+            },
+        })
+            .command({
+            command: 'start',
+            describe: 'Start app',
+            handler: lifecycle_1.start,
+        })
+            .command({
+            command: 'stop',
+            describe: 'Stop app and all services',
+            handler: lifecycle_1.stop,
+        })
+            .command({
+            command: 'restart',
+            describe: 'Restart app',
+            handler(args) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    print_helper_1.print_verbose('* Restart');
+                    yield lifecycle_1.stop();
+                    yield lifecycle_1.start(args);
+                });
+            },
+        })
+            .command({
+            command: 'env',
+            describe: '.env file manager',
+            builder(argv) {
+                return argv
+                    .command({
+                    command: 'set <key> <value>',
+                    describe: 'Set one in .env file',
+                    handler: env_helper_1.env_set,
+                })
+                    .command({
+                    command: 'set_mode <mode>',
+                    describe: 'Set env.app_mode',
+                    handler: set_app_mode_1.set_app_mode,
+                })
+                    .demandCommand();
+            },
+            handler() { },
+        })
+            .demandCommand();
+    },
+    handler() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    },
+})
+    .argv;
+//# sourceMappingURL=giao.js.map
