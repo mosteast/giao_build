@@ -1,0 +1,1 @@
+{"version":3,"file":"lack_config.js","sourceRoot":"","sources":["../../../src/error/lack_config.ts"],"names":[],"mappings":";;AAAA,iCAAgC;AAChC,qDAAiD;AACjD,yCAAqC;AAGrC,MAAa,WAAY,SAAQ,mBAAQ;IAMvC,YAAY,IAAI,EAAE,CAAE;QAClB,KAAK,CAAC,IAAI,EAAE,CAAC,EAAE,kCAAkC,CAAC,CAAA;QANpD,QAAG,GAAG,uBAAU,CAAC,aAAa,CAAA;QAC9B,UAAK,GAAG,cAAO,CAAC,QAAQ,CAAA;IAMxB,CAAC;CACF;AATD,kCASC"}

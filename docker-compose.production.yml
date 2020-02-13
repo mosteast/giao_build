@@ -1,0 +1,49 @@
+version: '3'
+services:
+  app: # Keyword, don't change it.
+    hostname: app
+    container_name: app
+    build: .
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - ${base_port_app}:${port_app}
+  phpmyadmin:
+    hostname: phpmyadmin
+    image: 'phpmyadmin/phpmyadmin'
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: ${port_rds_main}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - ${base_port_phpmyadmin}:${port_phpmyadmin}
+    depends_on:
+      - mysql
+  mysql:
+    hostname: mysql
+    restart: always
+    image: 'mosteastdocker/mysql:8'
+    env_file:
+      - .env
+    ports:
+      - ${base_port_rds_main}:${port_rds_main}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./storage/volume/mysql/data:/var/lib/mysql
+  redis:
+    hostname: redis
+    restart: always
+    env_file:
+      - .env
+    image: 'redis:5'
+    command: redis-server --appendonly yes # start with persistent storage
+    ports:
+      - ${base_port_redis_main}:${port_redis_main}
+    volumes:
+      - ./storage/volume/redis/data:/data
