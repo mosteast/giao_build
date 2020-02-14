@@ -8,6 +8,14 @@ import { start, stop } from '../dev/lib/app/lifecycle'
 import { T_opt_lifecycle, T_opt_start } from '../dev/lib/docker/docker_compose'
 import { set_app_mode } from '../dev/lib/docker/set_app_mode'
 
+process.on('uncaughtException', on_e)
+process.on('unhandledRejection', on_e)
+
+function on_e(e) {
+  throw e
+  process.exit(2)
+}
+
 yargs
   .command({
     command: '$0',

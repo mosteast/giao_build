@@ -18,7 +18,7 @@ function confirm_up_phpmyadmin() {
         const dbm_url = `http://${env_1.env(env_1.__.base_host)}:${env_1.env(env_1.__.base_port_phpmyadmin)}`;
         yield http_1.default.run(['-r', '30', '--mute', dbm_url]);
         if ((yield node_fetch_1.default(dbm_url)).ok) {
-            print_helper_1.print_success(`\nDatabase manager is up and running at: ${dbm_url}`);
+            print_helper_1.print_success(`Database manager is up and running at: ${dbm_url}`);
         }
         else {
             print_helper_1.print_error(`\nDatabase manager should have already started, but ${dbm_url} is not accessible, please report this error to us.`);

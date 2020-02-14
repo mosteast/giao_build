@@ -15,6 +15,12 @@ const print_helper_1 = require("@mosteast/print_helper");
 const yargs = require("yargs");
 const lifecycle_1 = require("../dev/lib/app/lifecycle");
 const set_app_mode_1 = require("../dev/lib/docker/set_app_mode");
+process.on('uncaughtException', on_e);
+process.on('unhandledRejection', on_e);
+function on_e(e) {
+    throw e;
+    process.exit(2);
+}
 yargs
     .command({
     command: '$0',
