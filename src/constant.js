@@ -15,7 +15,6 @@ exports.N_file_env = '.env';
 exports.N_file_env_example = 'env.example';
 exports.N_file_readme = 'readme.md';
 exports.N_file_dc = 'docker-compose.yml';
-exports.N_file_dc_dev = 'docker-compose.development.yml';
 exports.N_file_dc_prod = 'docker-compose.production.yml';
 exports.N_file_dockerfile = 'Dockerfile';
 exports.N_file_dockerfile_dev = 'Dockerfile.development';

@@ -9,10 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Docker compose config (Partially)
- * Object parsed from docker-compose.yml
- */
 const docker_compose_1 = require("docker-compose");
 const js_yaml_1 = require("js-yaml");
 const env_1 = require("../../../env");
@@ -34,18 +30,11 @@ function parse_dc_config(path) {
     });
 }
 exports.parse_dc_config = parse_dc_config;
-function get_default_dc_config_path(path) {
-    if (path) {
-        return path;
-    }
-    return env_1.env(env_1.__.NODE_ENV) === env_1.N_node_env.production ? constant_1.N_file_dc_prod : constant_1.N_file_dc_dev;
-}
-exports.get_default_dc_config_path = get_default_dc_config_path;
 function build_opt_dc(merge, opt) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const r = {
-            config: get_default_dc_config_path(),
+            config: constant_1.N_file_dc,
             cwd: shelljs_1.pwd().toString(),
             log: true,
             services: [],

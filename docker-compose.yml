@@ -2,7 +2,6 @@ version: '3'
 services:
   app: # Keyword, don't change it.
     hostname: app
-    container_name: app
     build: .
     restart: always
     env_file:

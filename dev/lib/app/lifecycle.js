@@ -16,9 +16,7 @@ const docker_compose_1 = require("docker-compose");
 const exfy_1 = require("exfy");
 const fs_extra_1 = require("fs-extra");
 const FileSync = require("lowdb/adapters/FileSync");
-const node_fetch_1 = require("node-fetch");
 const shelljs_1 = require("shelljs");
-const http_1 = require("waitcha/lib/commands/http");
 const env_1 = require("../../../env");
 const root_1 = require("../../../root");
 const constant_1 = require("../../../src/constant");
@@ -62,15 +60,14 @@ function copy_requirements() {
     fs_extra_1.copySync(path_1.r('bin'), path_1.b('bin'));
     fs_extra_1.copySync(path_1.r('public'), path_1.b('public'));
     fs_extra_1.copySync(path_1.r('src/view'), path_1.b('src/view'));
-    fs_extra_1.copySync(path_1.r('docker'), path_1.b('docker'));
+    fs_extra_1.copySync(path_1.r('Dockerfile.sh'), path_1.b('Dockerfile.sh'));
     // Copy Files
     fs_extra_1.copySync(path_1.r(constant_1.N_file_dockerfile), path_1.b(constant_1.N_file_dockerfile));
-    fs_extra_1.copySync(path_1.r(constant_1.N_file_dc_prod), path_1.b(constant_1.N_file_dc_prod));
+    fs_extra_1.copySync(path_1.r(constant_1.N_file_dc_prod), path_1.b(constant_1.N_file_dc));
     fs_extra_1.copySync(path_1.r('.env.example'), path_1.b('.env.example'));
     fs_extra_1.copySync(path_1.r('.gitignore'), path_1.b('.gitignore'));
     fs_extra_1.copySync(path_1.r('.dockerignore'), path_1.b('.dockerignore'));
     fs_extra_1.copySync(path_1.r('tsconfig.json'), path_1.b('tsconfig.json'));
-    fs_extra_1.copySync(path_1.r('package-lock.json'), path_1.b('package-lock.json'));
     // Copy ormconfig.js
     fs_extra_1.copySync(path_1.r('src/rds/main/ormconfig.js'), path_1.b('src/rds/main/ormconfig.js'));
 }
@@ -118,7 +115,6 @@ function start(opt) {
         util_1.confirm_production_dir();
         env_1.validate_envs();
         print_helper_1.print_verbose('NODE_ENV:', node_env);
-        const base_host = env_1.env(env_1.__.base_host);
         opt = yield docker_compose_2.build_opt_dc(opt);
         let { services, build, config } = opt;
         print_helper_1.print_info(`Using config: ${config}`);
@@ -149,21 +145,9 @@ function start(opt) {
                 yield fn({ dcc });
             }
         }
-        if (is_production) {
-            const url = `http://${base_host}:${env_1.env(env_1.__.base_port_app)}`;
-            print_helper_1.print_verbose(`* Verify connection at ${url}`);
-            // Wait when url is reachable.
-            yield http_1.default.run(['-r', '30', '--mute', url]);
-            // Test API connection.
-            const res = yield node_fetch_1.default(url);
-            if (res.ok) {
-                print_helper_1.print_success(`\nApp is up and running at: ${url}`);
-            }
-            else {
-                print_helper_1.print_error(`\nServices should have already started, but ${url} is not accessible, please report this error to us.`);
-            }
-        }
-        else {
+        // If not production just run it in host machine
+        if (!is_production) {
+            // await confirm_up_phpadmin()
             yield command_1.command('npm run dev:start');
         }
     });

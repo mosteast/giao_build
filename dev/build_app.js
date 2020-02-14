@@ -14,7 +14,7 @@ const lifecycle_1 = require("./lib/app/lifecycle");
 run();
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield lifecycle_1.build_app();
+        yield lifecycle_1.build_app().catch(e => { throw e; });
     });
 }
 //# sourceMappingURL=build_app.js.map
